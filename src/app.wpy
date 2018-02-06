@@ -1,4 +1,5 @@
 <style lang="less">
+@import './style/weui.less';
 .container {
   height: 100%;
   display: flex;
@@ -16,7 +17,7 @@ import 'wepy-async-function'
 export default class extends wepy.app {
   config = {
     pages: [
-      'pages/index'
+      'pages/newIndex'
     ],
     window: {
       backgroundTextStyle: 'light',

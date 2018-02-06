@@ -1,0 +1,103 @@
+<template>
+    <view class='page'>
+        <view class='page__hd'>
+            <view class='page__title'>test</view>
+            <view class='page__desc'>测试页面</view>
+        </view>
+        <view class='page__bd'>
+            <form bindsubmit='formSubmit' bindreset='formReset'>
+            <view class='weui-toptips weui-toptips_warn' wx:if='{{tipsFlag}}'>{{tipsTxt}}</view>
+
+            <view class='weui-cells weui-cells_after-title'>
+                <view class='weui-cell weui-cell_input'>
+                    <view class='weui-cell__hd'>
+                        <picker name='city2'   @change='bindCityChange' value='{{cityIndex}}' range='{{cities}}'>
+                            <view class='weui-select weui-select_in-select-after'>{{cities[cityIndex]}}</view>
+                        </picker>
+                    </view>
+                    <view class='weui-cell__bd'>
+                        <input name='inputNumber' class='weui-input' placeholder='请输入姓名或编号' />
+                    </view>
+                </view>
+            </view>
+            <view class='weui-cells__tips'>底部说明文字底部说明文字</view>
+
+
+
+
+            <checkbox-group name='checkbox' @change='bindAgreeChange'>
+                <label class='weui-agree' for='weuiAgree'>
+                    <view class='weui-agree__text'>
+                        <checkbox class='weui-agree__checkbox' id='weuiAgree' value='agree' checked='{{isAgree}}' />
+                        <view class='weui-agree__checkbox-icon'>
+                            <icon class='weui-agree__checkbox-icon-check' type='success_no_circle' size='9' wx:if='{{isAgree}}'></icon>
+                        </view>
+                        阅读并同意<navigator url='' class='weui-agree__link'>《相关条款》</navigator>
+                    </view>
+                </label>
+            </checkbox-group>
+
+            <view class='weui-btn-area'>
+                <button class='weui-btn' type='primary' form-type='submit' >确定</button>
+            </view>
+
+            </form>
+        </view>
+    </view>
+</template>
+
+<script>
+// import wepy from 'wepy';
+import wepy from 'wepy'
+export default class NewIndex extends wepy.page {
+  data = {
+    tipsFlag: false,
+
+    cities: ['广州', '深圳', '天津', '杭州'],
+
+    cityIndex: 0,
+
+    isAgree: false,
+
+    tipsTxt: ''
+  };
+
+  methods = {
+    bindAgreeChange(e) {
+      this.isAgree = !!e.detail.value.length
+      this.$apply()
+    },
+    bindCityChange(e) {
+      this.cityIndex = e.detail.value
+      this.$apply()
+    },
+    showTopTips() {},
+    formSubmit(e) {
+      console.log('form发生了submit事件，携带数据为：', e.detail.value)
+      // %E5%B9%BF%E5%B7%9E
+      var c = 'jQuery1102019048782878805515_1516764039470'
+      wepy.request(
+            'https://sp0.baidu.com/9_Q4sjW91Qh3otqbppnN2DJv/pae/common/api/yaohao?name=' +
+            e.detail.value.inputNumber +
+            '&city=' +
+            this.cities[e.detail.value.city2] +
+            '&format=json&resource_id=4003&cb=' +
+            c +
+            '&_=1516764039493'
+        ).then(d => {
+          console.log(d)
+          this.tipsFlag = true
+          this.tipsTxt = '123123123'
+          var re = /(\(\w+\))$/
+          var ddd = re.exec(d.data)
+          console.log(ddd)
+          this.$apply()
+        })
+    }
+  };
+
+  onLoad() {
+    console.log('d')
+  }
+}
+</script>
